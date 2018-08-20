@@ -14,13 +14,15 @@ The goals / steps of this project are the following:
 [//]: # (Image References)
 
 [image1]: ./output_images/calibration3_distorted.png "Undistorted"
-[image1-1]: ./output_images/calibration3_warped.png "Warped"
+[image1-1]: ./output_images/calibration3_distorted_warped.png "Warped"
 [image1-2]: ./output_images/calibration3_corner.png "Corners"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
+[image2]: ./output_images/lane_distorted.png "Lane undistortion"
+[image3]: ./output_images/lane_warped.png "Lane Warped"
+[image4]: ./output_images/lane_combination.png "Combination for image"
+[image5]: ./output_images/lane_combination_warped.png "Combination for warped"
+[image6]: ./output_images/lane_gray.png "Gray"
+[image7]: ./output_images/lane_rgb.png "RGB"
+[image8]: ./output_images/lane_hls.png "HLS"
 [video1]: ./project_video.mp4 "Video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
@@ -56,14 +58,21 @@ Then, I used cv2.getPerspectiveTransform and cv2.warpPerspective to get warped i
 
 #### 1. Provide an example of a distortion-corrected image.
 
-To demonstrate this step, I will describe how I apply the distortion correction to one of the test images like this one:
-![alt text][image2]
+First of all, I'd like to know which transform is better than others for all test images.
+So, I tested a lot and show them in jupyter notebook file.
+These are undistorted and warped 
+![alt text][image2] ![alt text][image3]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I used a combination of color and gradient thresholds to generate a binary image (thresholding steps at lines # through # in `another_file.py`).  Here's an example of my output for this step.  (note: this is not actually from one of the test images)
+I tested gradients of 'Sobel', 'Magnitude of Gradient' and 'Direction of the Gradients' for image and warped one.
+![alt text][image4]
+![alt text][image5]
 
-![alt text][image3]
+I tested Gray, RBG and HLS which of each component.
+![alt text][image6]
+![alt text][image7]
+![alt text][image8]
 
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
