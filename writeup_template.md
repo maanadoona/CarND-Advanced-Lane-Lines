@@ -23,7 +23,14 @@ The goals / steps of this project are the following:
 [image6]: ./output_images/lane_gray.png "Gray"
 [image7]: ./output_images/lane_rgb.png "RGB"
 [image8]: ./output_images/lane_hls.png "HLS"
-[video1]: ./project_video.mp4 "Video"
+[image9]: ./output_images/lane_color_combi.png "HLS"
+[image10]: ./output_images/lane_color_combi_warped.png "HLS"
+[image11]: ./output_images/lane_window.png "Sliding"
+[image12]: ./output_images/lane_window_prior.png "Sliding Prior"
+[image13]: ./output_images/lane_curvature.png "Curvature"
+[video1]: ./output_images/project_video_output.mp4 "project video output"
+[video2]: ./output_images/challenge_video_output.mp4 "challenge video output"
+[video3]: ./output_images/harder_challenge_video_output.mp4 "harder challenge video output"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/571/view) Points
 
@@ -60,66 +67,59 @@ Then, I used cv2.getPerspectiveTransform and cv2.warpPerspective to get warped i
 
 First of all, I'd like to know which transform is better than others for all test images.
 So, I tested a lot and show them in jupyter notebook file.
-These are undistorted and warped 
+These are undistorted and warped.
 ![alt text][image2] ![alt text][image3]
 
 #### 2. Describe how (and identify where in your code) you used color transforms, gradients or other methods to create a thresholded binary image.  Provide an example of a binary image result.
 
-I tested gradients of 'Sobel', 'Magnitude of Gradient' and 'Direction of the Gradients' for image and warped one.
+I tested gradients of 'Sobel', 'Magnitude of Gradient' and 'Direction of the Gradients' for image and warped one. I think 'Sobel' is better than others.
 ![alt text][image4]
 ![alt text][image5]
 
 I tested Gray, RBG and HLS which of each component.
+From this images, Gray and R of RGB has good quality. but these are not good at bright or dark cases. I think S of HLS is the best in all around case.
 ![alt text][image6]
 ![alt text][image7]
 ![alt text][image8]
 
+So, I combined Sobel and S of HLS and finally I got this result.
+![alt text][image9]
+![alt text][image10]
 
 #### 3. Describe how (and identify where in your code) you performed a perspective transform and provide an example of a transformed image.
 
-The code for my perspective transform includes a function called `warper()`, which appears in lines 1 through 8 in the file `example.py` (output_images/examples/example.py) (or, for example, in the 3rd code cell of the IPython notebook).  The `warper()` function takes as inputs an image (`img`), as well as source (`src`) and destination (`dst`) points.  I chose the hardcode the source and destination points in the following manner:
+When I got the warped image, I thought that the source and destination positions were important. I tried trapezoid to cover left and right lines at front. and I thought it is better to make trapezoid symmetrically.
+I got the points of them like this.
 
-```python
-src = np.float32(
-    [[(img_size[0] / 2) - 55, img_size[1] / 2 + 100],
-    [((img_size[0] / 6) - 10), img_size[1]],
-    [(img_size[0] * 5 / 6) + 60, img_size[1]],
-    [(img_size[0] / 2 + 55), img_size[1] / 2 + 100]])
-dst = np.float32(
-    [[(img_size[0] / 4), 0],
-    [(img_size[0] / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), img_size[1]],
-    [(img_size[0] * 3 / 4), 0]])
-```
+src = np.float32([[580, 450],[700, 450],
+                  [180, 720], [1100, 720]])
+dst = np.float32([[180, 0], [1100, 0], 
+                 [180, 720], [1100, 720]])
 
 This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 585, 460      | 320, 0        | 
-| 203, 720      | 320, 720      |
-| 1127, 720     | 960, 720      |
-| 695, 460      | 960, 0        |
+| 580, 450      | 180, 0        | 
+| 700, 450      | 1100, 0      |
+| 180, 720     | 180, 720      |
+| 1100, 720      | 1100, 720       |
 
-I verified that my perspective transform was working as expected by drawing the `src` and `dst` points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
-
-![alt text][image4]
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
-
-![alt text][image5]
+I got the left and right lane from histogram. while counting pixels through y-axis, the most stuffs in left and right side should be line.
+![alt text][image11]
+![alt text][image12]
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I studied and tried to implement the curvature but it's hard thing to me. So, I copied them from jeremy's. link : https://github.com/jeremy-shannon/CarND-Advanced-Lane-Lines
+
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
-
-![alt text][image6]
+![alt text][image13]
 
 ---
 
@@ -127,7 +127,14 @@ I implemented this step in lines # through # in my code in `yet_another_file.py`
 
 #### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
 
-Here's a [link to my video result](./project_video.mp4)
+1. Project
+![alt text][video1]
+
+2. Challenge
+![alt text][video2]
+
+3. Harder Challenge
+![alt text][video3]
 
 ---
 
@@ -135,4 +142,7 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+I did by myself before curvature and I think they are also hard things to me. In fact, I think it's not enough to understand that class contents about curvature and displaying cover-range.
+Anyway, I'd like to see whether my strategy works or not in video mode.
+Thank you.
+
